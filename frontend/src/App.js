@@ -21,6 +21,7 @@ import Wishlist from './components/wishlist/wishlist';
 import FAQ from './components/faq/faq';
 import PrivacyPolicy from './components/privacy/privacy';
 import ShippingPolicy from './components/shipping/shipping';
+import ArticlePage from './components/blog1/blog1';
 
 function App() {
   return (
@@ -48,6 +49,7 @@ function App() {
       <Route path='/FAQ' element={<FAQ />} />
       <Route path='/privacypolicy' element={<PrivacyPolicy />} />
       <Route path='/shippingpolicy' element={<ShippingPolicy />} />
+      <Route path='/bloginfo/:id' element={<ArticlePage />} />
       </Routes>
       <Footer/>
       </Router>

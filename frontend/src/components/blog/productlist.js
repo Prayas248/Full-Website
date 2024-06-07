@@ -63,7 +63,7 @@ const BlogProductList = () => {
             <Product
               key={index}
               image={product.image}
-              date={product.date}
+              date={product.date.slice(0,10)}
               title={product.title}
               id={product._id}
               

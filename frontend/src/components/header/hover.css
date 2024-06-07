@@ -1,5 +1,5 @@
 .Main_box{
-    width: 100%;
+    width: 95%;
     height: auto;
     background-color: white;
     margin-top: 10px;
@@ -7,6 +7,7 @@
     position: absolute;
     z-index: 20;
     gap: 50px;
+    margin-left: 15px;
 }
 
 .Apparel{
@@ -32,8 +33,8 @@
 }
 .photo{
      margin-left: 15px; 
-     height: 500px;
-     width: 250px; 
+     height: 300px;
+     width: 180px; 
      display: flex;
      margin-top: 90px;
      gap: 10px;

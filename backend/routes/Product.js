@@ -66,6 +66,9 @@ const {editCurrencyById} = require("../controllers/Currency/updateCurrency");
 const {deleteCoupon} = require("../controllers/Coupon/deleteCard");
 const {deleteAllComment} = require("../controllers/AllComments/deleteAllComment");
 const {duplicateBlog} = require("../controllers/Blog/duplicateBlog");
+const {getBlogbyID} = require("../controllers/Blog/getBlogId");
+
+router.get("/getblogId/:id",getBlogbyID);
 
 router.post("/duplicateBlog/:id",duplicateBlog);
 

@@ -6,42 +6,33 @@ const mongoose= require('mongoose');
 const Product = new mongoose.Schema({
     id:{
         type:Number,
-        required:true,
     },
     name:{
         type:String,
-        required:true,
    },
    image:{
-        type:String,
-        required:true,
+        type:[String],
    },
    category: {
      type: {
        // Main category (e.g., Men, Women, Kids)
        maincategory: {
          type: String,
-         required: true,
        },
        // Subcategories within the main category
        subcategories: {
          type: String,
-         required: true,
        },
        lastcategories:{
           type:String,
-          required:true,
        },
      },
-     required: true,
    },
    new_price:{
         type:Number,
-        required:true,
    },
    old_price:{
         type:Number,
-        required:true,
    },
    popular:{
      type:Boolean,
@@ -53,15 +44,12 @@ const Product = new mongoose.Schema({
    },
    material:{
         type:String,
-        required:true,
    },
    available:{
         type:String,
-        required:true,
    },
    product_details:{
         type:String,
-        required:true,
    },
    quantity:{
         type:Number,
@@ -81,6 +69,43 @@ const Product = new mongoose.Schema({
    weight:{
      type:Number,
    },
+   attributes:[{
+     title:{
+          type:String,
+     },
+     value:{
+          type:String,
+     },
+     isVisible:{
+          type:Boolean,
+          default:false,
+     }
+   }],
+   frequently_bought:{
+      products_selected:[{
+          id:{
+               type:String,
+          },
+          name:{
+               type:String,
+          }
+     }],
+      discount:{
+          type:Number,
+      },
+      ischecked_all:{
+          type:Boolean,
+      },
+      number_of_discount:{
+          type:Number
+      }
+    },
+    upsells:{
+     type:String,
+    },
+    cross_sells:{
+     type:String,
+    },
    dimensions:{
      length:{
           type:Number,
@@ -100,7 +125,6 @@ const Product = new mongoose.Schema({
    },
    material_care:{
         type:String,
-        required:true,
    },
    shipping:{
           type:String,
