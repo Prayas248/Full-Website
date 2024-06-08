@@ -7,6 +7,9 @@ const cors = require('cors');
 const dbConnect= require('./config/database');
 const createroute = require('./routes/Product');
 const imager = require('./controllers/Images/image');
+const dotenv = require("dotenv");
+
+dotenv.config();
 
 app.use(express.json());
 app.use(cors());

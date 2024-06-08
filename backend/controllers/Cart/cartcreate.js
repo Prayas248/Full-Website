@@ -9,18 +9,20 @@ const { response } = require("express");
 
 exports.createCart = async (req, res) => {
     try {
-       
+        
         const { product,token } = req.body;
         
         const getProduct = await Product.findById({_id:product});
-            
+        
         const { image, name } = getProduct;
+        const main = image[0];
+        console.log("hi",main)   
        const price = getProduct.new_price;
        const decode = jwt.verify(token, "prayas");
        
        let finder = decode.id;
         const cart = new Cart({
-            product, image, name,price
+            product, image:main, name,price
         })
       
         const savedCart = await cart.save();

@@ -1,8 +1,11 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import './checkout.css';
 import Handbags from '../handbag/handbags';
+import axios from "axios"
 
 const CheckoutForm = () => {
+  const [apidata, setApidata] = useState(null);
+  const [totalPrice, setTotalPrice] = useState(0);
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
@@ -19,6 +22,18 @@ const CheckoutForm = () => {
     paymentMethod: 'bank'
   });
 
+  const handlecart = async () => {
+    if (localStorage.getItem('token')) {
+      await fetch(`http://localhost:4000/getallcart/${localStorage.getItem('token')}`)
+        .then((res) => res.json())
+        .then((data) => { setApidata(data) })
+
+    }
+  }
+  useEffect(() => {
+    handlecart();
+  }, [])
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({ ...prevData, [name]: value }));
@@ -28,6 +43,54 @@ const CheckoutForm = () => {
     e.preventDefault();
     console.log(formData);
   };
+  useEffect(() => {
+    if (apidata && apidata.length) { // Calculate only if apidata is available
+      const newTotalPrice = apidata.reduce((acc, item) => acc + (item.price * item.quantity), 0);
+      setTotalPrice(newTotalPrice);
+    }
+  }, [apidata]);
+
+  const initPayment = (data) =>{
+    const options = {
+      key:"rzp_test_CgUOgFmuvJ2kxv",
+      amount:data.amount,
+      currency:data.currency,
+      name:apidata[0].name,
+      description:"Test Transaction",
+      order_id:data.id,
+      handler:async(response)=>{
+        try{
+          const verifyURL = "http://localhost:4000/verify" 
+          const {data} = await axios.post(verifyURL,response);
+          console.log(data);
+        }
+        catch(error){ 
+          console.log(error);
+        }
+      },
+      theme:{
+        color:"#3399cc",
+      },
+    };
+    const rzp1 = new window.Razorpay(options);
+    rzp1.open();
+  }
+
+  const handlepayment = async () => {
+    try {
+      console.log(totalPrice)
+      if(totalPrice){
+      const paymenturl = "http://localhost:4000/payment";
+      const {data} = await axios.post(paymenturl,{amount:totalPrice});
+      console.log(data);
+      initPayment(data.data)
+    }
+    }
+    catch (error) {
+      console.log(error);
+    }
+  }
+
 
   const formFields = [
     { label: 'First name *', name: 'firstName', type: 'text', required: true },
@@ -69,13 +132,13 @@ const CheckoutForm = () => {
             <label key={name}>
               <p>{label}</p>
               {type !== 'textarea' ? (
-                <input 
-                  type={type} 
-                  name={name} 
-                  placeholder={placeholder} 
-                  value={formData[name]} 
-                  onChange={handleChange} 
-                  required={required} 
+                <input
+                  type={type}
+                  name={name}
+                  placeholder={placeholder}
+                  value={formData[name]}
+                  onChange={handleChange}
+                  required={required}
                 />
               ) : (
                 <textarea
@@ -101,15 +164,15 @@ const CheckoutForm = () => {
           <div className="ordertop">
             <div className="ordert">
               <div className="order-item">
-                <span className="product">
-                  <img className="orderimg" src={Handbags} alt="Handbag" />
-                  <p>Artistic Allure: Black Cotton Saree with Applique Work × 1</p>
+                {apidata && (apidata.map((item) => (<><span className="product">
+                  <img className="orderimg" src={item.image} alt="Handbag" />
+                  <p>{item.name} × {item.quantity}</p>
                 </span>
-                <span className="subtotal">₹3,500.00</span>
+                  <span className="subtotal">₹{item.price * item.quantity}</span></>)))}
               </div>
               <div className="order-total">
                 <span>Total</span>
-                <span>₹3,500.00</span>
+                {apidata && apidata.length && <span>₹{totalPrice}</span>}
               </div>
               <div className="payment-method">
                 <label>
@@ -147,7 +210,8 @@ const CheckoutForm = () => {
               <input type="checkbox" required />
             </label>
           </div>
-          <button type="submit" className="place-order">Place order</button>
+          <button type="submit"  className="place-order">Place order</button>
+          <button onClick={handlepayment}>Payment</button>
         </div>
       </form>
     </>

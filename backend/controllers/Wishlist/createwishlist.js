@@ -16,12 +16,13 @@ exports.createWishlist = async (req, res) => {
             
         const { image, name } = getProduct;
        const price = getProduct.new_price;
-      
+      const main = image[0];
+     
        const decode = jwt.verify(token, "prayas");
        
        let finder = decode.id;
         const wishlist = new Wishlist({
-            product, image, name,price,user:finder
+            product, image:main, name,price,user:finder
         })
       
         const savedwishlist = await wishlist.save();

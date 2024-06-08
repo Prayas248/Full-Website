@@ -69,19 +69,19 @@
   }
   .ordertop{
     border: 1px solid black;
-    height: 350px;
+    height: auto;
   }
   .ordert{
     margin-left: 14px;
     margin-right: 14px;
   }
   .orderimg{
-    height: 70px;
-    width: 75px;
+    width: auto;
+    height: 50px;
   }
   .product{
     display: flex;
-    gap: 10px;
+    gap: 100px;
   }
   .product p{
     margin-top: 15px;
@@ -91,6 +91,7 @@
   }
   .order-item, .order-total {
     display: flex;
+    flex-direction: column;
     justify-content: space-between;
     margin-bottom: 10px;
     margin-top: 40px;

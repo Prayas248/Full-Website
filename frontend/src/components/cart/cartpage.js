@@ -54,6 +54,20 @@ const CartPage = () => {
     handlecart();
 
   }
+  const updateCart = async(id,delta,quantity) =>{
+    await fetch(`http://localhost:4000/updateCart/${id}`, {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ quantity: quantity + delta }),
+    })
+      .then((res) => res.json())
+      .then((data) => { console.log(data) })
+      
+      handlecart();
+  }
   const handleCoupon = async () => {
    
       await fetch(`http://localhost:4000/getCouponbyCode/${formdata.code}`)
@@ -91,12 +105,10 @@ console.log(discount_price)
     handlecart();
   },[])
 
-  const handleQuantityChange = (id, delta) => {
-    setCartItems((items) =>
-      items.map((item) =>
-        item.id === id ? { ...item, quantity: item.quantity + delta } : item
-      )
-    );
+  const handleQuantityChange = (id, delta,quantity) => {
+    
+    updateCart(id,delta,quantity);
+
   };
 
   const handleRemoveItem = (id) => {
@@ -145,9 +157,9 @@ console.log(discount_price)
               }}>{item.name}</td>
               <td>₹{item.price}</td>
               <td>
-                <button onClick={() => handleQuantityChange(item._id, -1)} disabled={item.quantity <= 1}>-</button>
-                <span></span>
-                <button onClick={() => handleQuantityChange(item._id, 1)}>+</button>
+                <button onClick={() => handleQuantityChange(item._id, -1,item.quantity)} disabled={item.quantity <= 1}>-</button>
+                <span>{item.quantity}</span>
+                <button onClick={() => handleQuantityChange(item._id, 1,item.quantity)}>+</button>
               </td>
               <td>₹{(item.price).toFixed(2)}</td>
               <td>

@@ -44,6 +44,9 @@ const Blog = new mongoose.Schema({
             blog_name:{
                 type:String,
             },
+            email:{
+                type:String,
+            },
             date: {
                 type: Date,
                 default: Date.now,

@@ -85,7 +85,7 @@ const Product = ({ product }) => {
   return(<>
     {product && ( // Wrap conditional JSX in parentheses
       <div className="product" onClick={() => navigate(`/product/${product._id}`)}>
-        <img src={product.image} alt={product.name} />
+        <img src={product.image[0]} alt={product.name} />
         <h3>{product.name}</h3>
         <p>{product.new_price}</p>
       </div>

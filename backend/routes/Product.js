@@ -67,6 +67,15 @@ const {deleteCoupon} = require("../controllers/Coupon/deleteCard");
 const {deleteAllComment} = require("../controllers/AllComments/deleteAllComment");
 const {duplicateBlog} = require("../controllers/Blog/duplicateBlog");
 const {getBlogbyID} = require("../controllers/Blog/getBlogId");
+const {updateCart} = require("../controllers/Cart/updateCart");
+const {payment} = require("../controllers/Order.js/payment");
+const {verify} = require("../controllers/Order.js/payment");
+
+
+router.post("/payment",payment);
+router.post("/verify",verify);
+
+router.post("/updateCart/:id",updateCart)
 
 router.get("/getblogId/:id",getBlogbyID);
 

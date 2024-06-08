@@ -87,7 +87,7 @@ const getnewcollectionsub = async (id) =>{
           {apidata && (apidata.slice(start,start + 4).map((product, index) => (
             <Product
               key={index}
-              image={product.image}
+              image={product.image[0]}
               title={product.name}
               price={product.new_price}
               id={product._id}

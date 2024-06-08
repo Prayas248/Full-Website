@@ -59,15 +59,15 @@ const handlecartclick = async () =>{
     
       <div className="displayContainer">
         <div className="imageMenu">
-          <img alt="image" src={apidata.image} />
-          <img alt="image" src={apidata.image} />
-          <img alt="image" src={apidata.image} />
-          <img alt="image" src={apidata.image}/>
-          <img alt="image" src={apidata.image} />
-          <img alt="image" src={apidata.image} />
+          <img alt="image" src={apidata.image[0]} />
+          <img alt="image" src={apidata.image[0]} />
+          <img alt="image" src={apidata.image[0]} />
+          <img alt="image" src={apidata.image[0]}/>
+          <img alt="image" src={apidata.image[0]} />
+          <img alt="image" src={apidata.image[0]} />
         </div>
         <div className="mainImageContainer">
-          <img alt="image" src={apidata.image}  className="mainImage" />
+          <img alt="image" src={apidata.image[0]}  className="mainImage" />
         </div>
       </div>
       <div className="infoContainer">

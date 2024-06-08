@@ -9,6 +9,7 @@ const Product = ({ image, date, title,id }) => {
   const [hover, setHover] = useState(false);
   const navigate = useNavigate();
 
+
   return (
     <div
       className={`blogproduct-card ${hover ? 'hover' : ''}`}

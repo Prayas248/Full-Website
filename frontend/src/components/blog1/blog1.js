@@ -6,63 +6,104 @@ import { useParams } from 'react-router-dom';
 
 const ArticlePage = () => {
   const params = useParams();
+  const [apidata, setApidata] = useState(null);
+  const [comment,setComment] = useState(null);
+  const getBlogInfo = async (id) => {
+    if (id) {
+      await fetch(`http://localhost:4000/getblogId/${id}`)
+        .then((res) => res.json())
+        .then((data) => { setApidata(data) })
+
+    }
+  }
+  const getBlogComments = async (id) => {
+    if (id) {
+      await fetch(`http://localhost:4000/getAllCommentforBlog/${id}`)
+        .then((res) => res.json())
+        .then((data) => { setComment(data) })
+
+    }
+  }
+  const [produ,setProdu] = useState('');
   useEffect(() => {
     const productId = params.id;
     window.scrollTo({
       top: 0,
-       // Optional: Animate the scroll
+      // Optional: Animate the scroll
     });
     console.log(productId)
+    setProdu(productId)
+    getBlogInfo(productId);
+    getBlogComments(productId);
+  }, [params]);
   
-  }, []);
-    const [comments, setComments] = useState([
-        {
-          id: 1,
-          name: 'porn',
-          date: 'December 22, 2023 at 11:42 AM',
-          content: 'daktiloglbigbli.6fsCnzUyC44',
-        },
-        {
-          id: 2,
-          name: 'damnation',
-          date: 'December 31, 2023 at 4:17 PM',
-          content: 'damnation.xyandenxvuurlmus.6vsaD7RtBfw8',
-        },
-      ]);
-    
-      const [newComment, setNewComment] = useState({
-        content: '',
+
+  const [newComment, setNewComment] = useState({
+    by: {
+      body: '',
+      name: '',
+      email: '',
+      token: localStorage.getItem('token'),
+    }
+  });
+  const handleChange = (event) => {
+    const { name, value } = event.target;
+
+    // Update the nested "by" property using spread syntax
+    setNewComment((prevComment) => ({
+      ...prevComment,
+      by: {
+        ...prevComment.by,
+        [name]: value, // Update the specific property based on name
+      },
+    }));
+  };
+  const createComment = async (info) => {
+    if(produ && info.by.token){
+    await fetch(`http://localhost:4000/createBlogComment/${produ}`, {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(info),
+    }).then(alert("Done scene"))
+  }
+  getBlogComments(produ);
+  }
+  const handleSubmit = (event) => {
+    event.preventDefault(); // Prevent default form submission
+
+    // Submit the newComment data to your backend (implementation not shown)
+    console.log('Submitting comment:', newComment);
+
+    createComment(newComment);
+
+
+    // Optionally, reset the form after submission
+    setNewComment({
+      by: {
+        body: '',
         name: '',
         email: '',
-        website: '',
-      });
-    
-      const handleChange = (e) => {
-        const { name, value } = e.target;
-        setNewComment((prev) => ({ ...prev, [name]: value }));
-      };
-    
-      const handleSubmit = (e) => {
-        e.preventDefault();
-        setComments([...comments, { ...newComment, date: new Date().toLocaleString() }]);
-        setNewComment({
-          content: '',
-          name: '',
-          email: '',
-          website: '',
-        });
-      };
+      },
+    });
+
+
+  };
+
+
   return (
     <div className="article-container">
       <h2 className="article-title">
-        The age-old Indian art form of Kalamkari continues to draw inspiration from mythology, nature, and folklore
+        {apidata && apidata.title}
       </h2>
-      <p className="article-meta">December 3, 2023 / by Admin / in Uncategorized</p>
-      <img src={Kalamkari} alt="Kalamkari art" className="article-image" />
+      <p className="article-meta">{apidata && apidata.date.slice(0, 10)} / by {apidata && apidata.author} / in {apidata && apidata.category}</p>
+      <img src={apidata && apidata.image} alt="Kalamkari art" className="article-image" />
       <div className="article-content">
         <p>
-          The age-old Indian art form of Kalamkari continues to stand the test of time employing a painstaking technique spanning generations to weave beautiful motifs and stories onto fabric. 
-          The term "Kalamkari" refers to the process of hand-painting or block-printing on cloth. It originates from the Persian terms "kalam," which means pen, and "kari," which means workmanship. 
+          The age-old Indian art form of Kalamkari continues to stand the test of time employing a painstaking technique spanning generations to weave beautiful motifs and stories onto fabric.
+          The term "Kalamkari" refers to the process of hand-painting or block-printing on cloth. It originates from the Persian terms "kalam," which means pen, and "kari," which means workmanship.
           The origins of the Kalamkari can be found in ancient Indian books and traditions, where references point to the language development as early as the seventh century.
         </p>
         <p>The two most well-known Kalamkari traditions, Srikalahasti and Machilipatnam, have a varied history and come from separate parts of Andhra Pradesh, India. The elaborate temple paintings and Hindu epics serve as sources of inspiration for the mythological Srikalahasti style. On the other hand, the Machilipatnam style—which draws inspiration from Mughal and Persian aesthetics—often uses vivid colors and flowery designs. These geographical differences emphasize Kalamkari’s adaptability and variety, which make it an exciting and ever-evolving art form.</p>
@@ -73,59 +114,56 @@ const ArticlePage = () => {
         <p>In the contemporary day, Kalamkari has difficulties despite its ongoing appeal. The traditional craft is under threat from the accessibility of synthetic colors and the rising demand for mass-produced fabrics. Furthermore, it is crucial to transmit the understanding from one generation of people to the next because Kalamkari is a time-consuming art and requires complex abilities. Protecting this priceless cultural asset will require sustained ethical manufacturing methods, support for artisan groups, and awareness-raising. In conclusion, Kalamkari is proof of India’s artistic ability and depth of culture. Its richly traditional past has set the way for a dynamic, ever-evolving art form that still enthralls audiences around the globe. In addition to appreciating the exquisite workmanship of the Kalamkari we also understand the need of protecting and fostering this legacy in order to guarantee that tales will be woven for future generations by the power of the ink and the brilliant colors of natural dyes.</p>
       </div>
       <div className="comments-section">
-      <h2 className="cen">{comments.length} Comments</h2>
-      {comments.map((comment) => (
-        <div key={comment.id} className="comment">
-          <div className="comment-author">
-            <div className="author-avatar"></div>
-            <span className="author-name">{comment.name}</span>
+        <h2 className="cen">{comment && comment.length} Comments</h2>
+        {comment && comment.map((comment) => (
+          <div key={comment.by.id} className="comment">
+            <div className="comment-author">
+              <div className="author-avatar"></div>
+              <span className="author-name">{comment.by.name}</span>
+            </div>
+            <div className="comment-meta">
+              <span>{comment.by.date.slice(0,10)}</span>
+            </div>
+            <div className="comment-content">
+              <p>{comment.by.body}</p>
+            </div>
+            <div className="comment-reply">
+              <a href="">Reply</a>
+            </div>
           </div>
-          <div className="comment-meta">
-            <span>{comment.date}</span>
-          </div>
-          <div className="comment-content">
-            <p>{comment.content}</p>
-          </div>
-          <div className="comment-reply">
-            <a href="#">Reply</a>
-          </div>
-        </div>
-      ))}
-      <h2 className="cen">Leave a Reply</h2>
-      <form className="reply-form" onSubmit={handleSubmit}>
-        <textarea
-          name="content"
-          value={newComment.content}
-          onChange={handleChange}
-          placeholder="Content"
-          required
-        />
-        <input
-          type="text"
-          name="name"
-          value={newComment.name}
-          onChange={handleChange}
-          placeholder="Name"
-          required
-        />
-        <input
-          type="email"
-          name="email"
-          value={newComment.email}
-          onChange={handleChange}
-          placeholder="Email"
-          required
-        />
-        <input
+        ))}
+        <h2 className="cen">Leave a Reply</h2>
+        <form className="reply-form" onSubmit={handleSubmit}>
+          <textarea
+            name="body"
+            onChange={handleChange}
+            placeholder="Content"
+            required
+          />
+          <input
+            type="text"
+            name="name"
+            onChange={handleChange}
+            placeholder="Name"
+            required
+          />
+          <input
+            type="email"
+            name="email"
+            onChange={handleChange}
+            placeholder="Email"
+            required
+          />
+          {/*<input
           type="url"
           name="website"
           value={newComment.website}
           onChange={handleChange}
           placeholder="Website"
-        />
-        <button type="submit">Post Comment</button>
-      </form>
-    </div>
+        />*/}
+          <button type="submit">Post Comment</button>
+        </form>
+      </div>
     </div>
   );
 };
