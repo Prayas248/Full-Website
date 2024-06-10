@@ -203,7 +203,8 @@ function ProductInvoice() {
                 <tr key={index}>
                   <td><input type="checkbox" /></td>
                   <td><img style={{height:'80px',width:'auto'}} src={invoice.image} alt="Image" /></td>
-                  <td>{invoice.name}<br /><span style={{cursor:"pointer"}} onClick={()=>{navigate(`/addproduct/${invoice._id}`)}}>Edit</span></td>
+                  <td>{invoice.name}<br /><span style={{cursor:"pointer"}} onClick={()=>{navigate(`/addproduct/${invoice._id}`)}}>Edit</span><span> | </span>
+                  <span style={{cursor:"pointer"}} onClick={()=>{navigate(`/addproduct/${invoice._id}`)}}>View</span></td>
                   <td>{/*invoice.Sku*/}</td>
                   <td>{/*invoice.Stock*/}</td>
                   <td>{invoice.new_price}</td>

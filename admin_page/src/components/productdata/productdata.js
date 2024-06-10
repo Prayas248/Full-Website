@@ -65,7 +65,7 @@ const ProductData = () => {
     console.log(couponData)
   }, [couponData])
   useEffect(()=>{
-    setCouponData({...couponData,image:imageData})
+    setCouponData({image:imageData})
   },[imageData])
   const handleInputChange = (event) => {
     setCouponData({
@@ -78,9 +78,9 @@ const ProductData = () => {
     const productId = params.id;
     const getproduct = async (productId) => {
       if (productId) {
-        await fetch(`http://localhost:4000/getproductbyID/${productId}`)
-          .then((res) => res.json())
-          .then((data) => { setCouponData(data) })
+        const response =  await fetch(`http://localhost:4000/getproductbyID/${productId}`)
+        const data = await response.json();
+        setCouponData(data);
       }
     }
     getproduct(productId);
@@ -105,7 +105,7 @@ const ProductData = () => {
   }
 
   const handleSubmitter = async () => {
-    await fetch(`http://localhost:4000/addproduct`, {
+    const response = await fetch(`http://localhost:4000/addproduct`, {
       method: 'POST',
       headers: {
         Accept: 'application/json',
@@ -113,6 +113,18 @@ const ProductData = () => {
       },
       body: JSON.stringify(couponData),
     }).then(alert("Done scene"))
+    console.log("NEW",couponData)
+  }
+  const handleUpdate = async()=>{
+    const response = await fetch(`http://localhost:4000/updateproduct/${params.id}`, {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(couponData),
+    }).then(alert("Done scene"))
+    console.log("NEW",couponData)
   }
 
   return (
@@ -211,7 +223,7 @@ const ProductData = () => {
           {activeSection === "Link" && <ProductLink couponData={couponData} setCouponData={setCouponData} />}
           {activeSection === "Shipping" && <ShippingForm couponData={couponData} setCouponData={setCouponData} />}
           {activeSection === "Attribute" && <AttributeForm couponData={couponData} setCouponData={setCouponData} />}
-          <button onClick={handleSubmitter}>Save</button>
+          {params.id ? <button onClick={handleUpdate}>Update</button> :<button onClick={handleSubmitter}>Save</button>}
         </div>
         <div className="genpublish-container">
           <div className="genpublish-section">
