@@ -4,14 +4,15 @@ import './productattribute.css';
 const AttributeForm = ({couponData,setCouponData}) => {
   const [isExpanded, setIsExpanded] = useState(true);
   const [localData, setLocalData] = useState({
-    attributes: [{
-      title: '',
-      value: '',
-      isVisible: false,
-    }]
+    attributes: couponData.attributes ? [...couponData.attributes] : [{
+      title:"",
+      value:"",
+      isVisible:false,
+    }],
   });
+  
   useEffect(()=>{
-    console.log(localData);
+    console.log(localData,couponData.attributes);
   },[localData])
 
   const handleExpandToggle = () => {
@@ -53,7 +54,7 @@ const AttributeForm = ({couponData,setCouponData}) => {
       {isExpanded && (
         <div className="form-content">
           <h3>New Attribute</h3>
-          {localData.attributes.map((attribute, index) => ( // Use index in the map callback
+          {localData && localData.attributes.map((attribute, index) => ( // Use index in the map callback
             <div key={index} className="form-group">
               <label>Name:</label>
               <input

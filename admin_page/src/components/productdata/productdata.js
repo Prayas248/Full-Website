@@ -11,13 +11,15 @@ import ShippingForm from '../productshipping/productshipping';
 import AttributeForm from '../productattribute/productattribute';
 import ProductMedia from '../productmedia/productmedia';
 import ProductCategories from '../category/category';
+import { useParams } from 'react-router-dom';
 
 const ProductData = () => {
-  const [isopen,setisOpen] = useState(false);
+  const [isopen, setisOpen] = useState(false);
   const [activeSection, setActiveSection] = useState('General'); // Track active section
-  const [imageData,setImageData] = useState([]);
+  const [imageData, setImageData] = useState([]);
+  const [apidata, setApidata] = useState(null)
   const [couponData, setCouponData] = useState({
-    name: '',
+    name: 'hi',
     permalink: '',
     old_price: '',
     new_price: '',
@@ -30,63 +32,88 @@ const ProductData = () => {
     sold_individually: '',
     stock_status: '',
     dimensions: {
-      length: '', 
-      width: '', 
-      height: '', 
+      length: '',
+      width: '',
+      height: '',
     },
-    weight:'',
-    shipping_class:'',
-    image:[],
-    category:{
-      maincategory:'',
-      subcategories:'',
-      lastcategories:'',
+    weight: '',
+    shipping_class: '',
+    image: [],
+    category: {
+      maincategory: '',
+      subcategories: '',
+      lastcategories: '',
     },
-    material:'',
+    material: '',
     attributes: [{
       title: '',
       value: '',
       isVisible: false,
     }],
-    frequently_bought:{
-      products_selected:[],
-      discount:'',
-      ischecked_all:false,
-      number_of_discount:''
+    frequently_bought: {
+      products_selected: [],
+      discount: '',
+      ischecked_all: false,
+      number_of_discount: ''
     },
-    upsells:'',
-    cross_sells:'',
-    new_collection:false,
-    product_details:'',
+    upsells: '',
+    cross_sells: '',
+    new_collection: false,
+    product_details: '',
   });
- useEffect(()=>{
-  console.log(couponData)
- },[couponData])
-  const handleInputChange = (event) => {
-    const { name, value } = event.target;
-    setCouponData((prevInfo) => ({ ...prevInfo, [name]: value }));
-  };
+  useEffect(() => {
+    console.log(couponData)
+  }, [couponData])
   useEffect(()=>{
-    setCouponData({image:imageData})
+    setCouponData({...couponData,image:imageData})
   },[imageData])
+  const handleInputChange = (event) => {
+    setCouponData({
+      ...couponData,
+      [event.target.name]: event.target.value,
+    });
+  };
+  const params = useParams();
+  useEffect(() => {
+    const productId = params.id;
+    const getproduct = async (productId) => {
+      if (productId) {
+        await fetch(`http://localhost:4000/getproductbyID/${productId}`)
+          .then((res) => res.json())
+          .then((data) => { setCouponData(data) })
+      }
+    }
+    getproduct(productId);
+    console.log(couponData)
+  }, [])
+  const handleAddClick = () => {
+    // Handle image upload logic (if applicable)
+    // ... (code to upload or process image)
+    console.log("This is image",imageData)
+   console.log(couponData)
+    // Update couponData with image data (replace with your actual logic)
+    
+
+    // Perform additional actions after updating couponData
+  };
   const handleSectionClick = (section) => {
     setActiveSection(section); // Update active section state
   };
 
-  const handlepop = () =>{
+  const handlepop = () => {
     setisOpen(!isopen);
   }
-  
-  const handleSubmitter = async() =>{
-    await fetch(`http://localhost:4000/addproduct`,{
-        method:'POST',
-        headers:{
-            Accept:'application/json',
-            'Content-Type':'application/json',
-        },
-        body:JSON.stringify(couponData),
+
+  const handleSubmitter = async () => {
+    await fetch(`http://localhost:4000/addproduct`, {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(couponData),
     }).then(alert("Done scene"))
-}
+  }
 
   return (
     <div className="genproduct-data-container">
@@ -101,11 +128,11 @@ const ProductData = () => {
         </div>
         <div className="genform-groups">
           <label htmlFor="permalink">Permalink:</label>
-          <input type="text" 
-          id="permalink" 
-          name="permalink"
-          value={couponData.permalink}
-          onChange={handleInputChange} />
+          <input type="text"
+            id="permalink"
+            name="permalink"
+            value={couponData.permalink}
+            onChange={handleInputChange} />
         </div>
       </div>
       <div className="genform-groupsadd">
@@ -113,42 +140,43 @@ const ProductData = () => {
         <div className='mediapop'>{isopen && <ProductMedia imageData={imageData} setImageData={setImageData} />}</div>
       </div>
       <div className='product_main'>
-      <div className="midseo-form">
-      <div className="midform-group">
-        <label>Product Title</label>
-        <div className="midinput-group">
-          <select>
-            <option>Product Title</option>
-            <option>Separator</option>
-            <option>Site Title</option>
-          </select>
-          <input type="text"  />
-        </div>
-      </div>
+        <div className="midseo-form">
+          <div className="midform-group">
+            <label>Product Title</label>
+            <div className="midinput-group">
+              <select>
+                <option>Product Title</option>
+                <option>Separator</option>
+                <option>Site Title</option>
+              </select>
+              <input type="text" />
+            </div>
+          </div>
 
-      <div className="midform-group">
-        <label>Meta Description</label>
-        <div className="midinput-group">
-          <select>
-            <option>Product Short Description</option>
-            <option>Product Content</option>
-          </select>
-          <textarea name="product_details"
-          value={couponData.product_details}
-          onChange={handleInputChange}/>
-        </div>
-      </div>
+          <div className="midform-group">
+            <label>Meta Description</label>
+            <div className="midinput-group">
+              <select>
+                <option>Product Short Description</option>
+                <option>Product Content</option>
+              </select>
+              <textarea name="product_details"
+                value={couponData.product_details}
+                onChange={handleInputChange} />
+            </div>
+          </div>
 
-      <div className="midform-group">
-        <label>Focus Keyphrase</label>
-        <div className="midinput-group">
-          <input type="text" />
-          <button>Add Focus Keyphrase</button>
-          <button>Get Additional Keyphrases</button>
-      </div>
-    </div>
-    </div>
-    <div><ProductCategories couponData={couponData} setCouponData={setCouponData}/></div></div>
+          <div className="midform-group">
+            <label>Focus Keyphrase</label>
+            <div className="midinput-group">
+              <input type="text" />
+              <button>Add Focus Keyphrase</button>
+              <button>Get Additional Keyphrases</button>
+            </div>
+          </div>
+        </div>
+        <div><ProductCategories couponData={couponData} setCouponData={setCouponData} /></div></div>
+        <button onClick={handleAddClick}>Add this</button>
       <header className="genheader">
         <h2>Size Chart:</h2>
         <button className="gendrop-file">Or drop a file</button>
@@ -176,13 +204,13 @@ const ProductData = () => {
               </ul>
             </aside>
           </div>
-          {activeSection === "General" && <ProductGen couponData={couponData} setCouponData={setCouponData}  />}
-          {activeSection === "Frequent" && <ProductFeq couponData={couponData} setCouponData={setCouponData}/>}
-          {activeSection === "Custom" && <ProductCustom couponData={couponData} setCouponData={setCouponData}/>}
-          {activeSection === "Inventory" && <ProductInventory couponData={couponData} setCouponData={setCouponData}/>}
-          {activeSection === "Link" && <ProductLink couponData={couponData} setCouponData={setCouponData}/>}
-          {activeSection === "Shipping" && <ShippingForm couponData={couponData} setCouponData={setCouponData}/>}
-          {activeSection === "Attribute" && <AttributeForm couponData={couponData} setCouponData={setCouponData}/>}
+          {activeSection === "General" && <ProductGen couponData={couponData} setCouponData={setCouponData} />}
+          {activeSection === "Frequent" && <ProductFeq couponData={couponData} setCouponData={setCouponData} />}
+          {activeSection === "Custom" && <ProductCustom couponData={couponData} setCouponData={setCouponData} />}
+          {activeSection === "Inventory" && <ProductInventory couponData={couponData} setCouponData={setCouponData} />}
+          {activeSection === "Link" && <ProductLink couponData={couponData} setCouponData={setCouponData} />}
+          {activeSection === "Shipping" && <ShippingForm couponData={couponData} setCouponData={setCouponData} />}
+          {activeSection === "Attribute" && <AttributeForm couponData={couponData} setCouponData={setCouponData} />}
           <button onClick={handleSubmitter}>Save</button>
         </div>
         <div className="genpublish-container">

@@ -5,12 +5,12 @@ import { useState } from "react";
 function ProductGen({couponData,setCouponData}) {
 
     const [localData, setLocalData] = useState({
-        old_price: '',
-        new_price: '',
-        sale_date_from: '',
-        sale_date_end: '',
-        sale_quantity: '',
-        sold_items: '',
+        old_price: couponData.old_price,
+        new_price: couponData.new_price,
+        sale_date_from: couponData.sale_date_from,
+        sale_date_end: couponData.sale_date_end,
+        sale_quantity: couponData.sale_quantity,
+        sold_items: couponData.sold_items,
       });
     
       const handleChange = (event) => {
@@ -30,7 +30,9 @@ function ProductGen({couponData,setCouponData}) {
                     type="number"
                     id="regularPrice"
                     className="form-control"
-                    name="old_price"  onChange={handleChange}
+                    name="old_price" 
+                    onChange={handleChange}
+                    value={localData.old_price}
                 />
             </div>
             <div className="genform-group">
@@ -40,6 +42,7 @@ function ProductGen({couponData,setCouponData}) {
                     id="salePrice"
                     className="form-control"
                     name="new_price" onChange={handleChange}
+                    value={localData.new_price}
                 />
             </div>
             <div className="genform-group">

@@ -9,14 +9,14 @@ function ShippingForm({ couponData, setCouponData }) {
 
   const [localData, setLocalData] = useState({
     dimensions: {
-      length: '',
-      width: '',
-      height: '',
+      length: couponData?.dimensions?.length ? couponData.dimensions.length : "",
+      width: couponData?.dimensions?.width ? couponData.dimensions.width : "",
+      height: couponData?.dimensions?.height ? couponData.dimensions.height : "",
     },
-    weight: '',
-    shipping_class: '',
+    weight: couponData?.weight ? couponData.weight : "",
+    shipping_class: couponData?.shipping_class ? couponData.shipping_class : "",
   });
-
+  
   const handleSubmit = (event) => {
     event.preventDefault();
     console.log('Weight:', weight);
@@ -39,6 +39,7 @@ function ShippingForm({ couponData, setCouponData }) {
           <input
             type="number"
             id="weight"
+            value={couponData?.weight}
             onChange={(event) => setLocalData({ weight: event.target.value })}
           />
         </div>
@@ -48,6 +49,7 @@ function ShippingForm({ couponData, setCouponData }) {
             <input
               type="number"
               id="length"
+              value={couponData?.dimensions?.length}
               onChange={(event) => setLocalData((prevState) => ({
                 ...prevState,
                 dimensions: {
@@ -61,6 +63,7 @@ function ShippingForm({ couponData, setCouponData }) {
             <input
               type="number"
               id="width"
+              value={localData?.dimensions?.width}
               onChange={(event) => setLocalData((prevState) => ({
                 ...prevState,
                 dimensions: {
@@ -73,6 +76,7 @@ function ShippingForm({ couponData, setCouponData }) {
             <input
               type="number"
               id="height"
+              value={localData?.dimensions?.height}
               onChange={(event) => setLocalData((prevState) => ({
                 ...prevState,
                 dimensions: {
@@ -88,6 +92,7 @@ function ShippingForm({ couponData, setCouponData }) {
           <label htmlFor="shippingClass">Shipping Class</label>
           <select
             id="shippingClass"
+            value={localData?.shipping_class}
             onChange={(event) => setLocalData({ shipping_class: event.target.value })}
           >
             <option value="No shipping class">No shipping class</option>

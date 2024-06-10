@@ -4,17 +4,17 @@ import { useEffect, useState } from 'react';
 const ProductLink = ({couponData,setCouponData}) => {
   const [searchResults, setSearchResults] = useState('');
   const [searchTerm, setSearchTerm] = useState('');
-  const [selectedProducts, setSelectedProducts] = useState('');
+  const [selectedProducts, setSelectedProducts] = useState(couponData.upsells);
   const [isSearchResultsOpen, setIsSearchResultsOpen] = useState(false);
 
   const [searchTermer, setSearchTermer] = useState('');
-  const [selectedProductser, setSelectedProductser] = useState('');
+  const [selectedProductser, setSelectedProductser] = useState(couponData.cross_sells);
   const [isSearchResultsOpener, setIsSearchResultsOpener] = useState(false);
-  const [searchResultser, setSearchResultser] = useState('');
+  const [searchResultser, setSearchResultser] = useState(couponData.cross_sells);
 
   const [localData,setLocalData] = useState({
-    upsells:'',
-    cross_sells:'',
+    upsells:couponData.upsells,
+    cross_sells:couponData.cross_sells,
   })
 
   const handleSearchChange = (event) => {

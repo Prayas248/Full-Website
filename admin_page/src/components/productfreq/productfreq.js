@@ -2,20 +2,20 @@ import React, { useState,useEffect } from 'react';
 import './productfreq.css';
 
 function ProductFeq({couponData,setCouponData}) {
-  const [discount, setDiscount] = useState(0);
-  const [items, setItems] = useState(2);
-  const [checked, setChecked] = useState(false);
+  const [discount, setDiscount] = useState(couponData.frequently_bought?.discount);
+  const [items, setItems] = useState(couponData.frequently_bought?.number_of_discount);
+  const [checked, setChecked] = useState(couponData.frequently_bought?.ischecked_all);
   
   const [searchTerm, setSearchTerm] = useState('');
   const [searchResults, setSearchResults] = useState([]);
-  const [selectedProducts, setSelectedProducts] = useState([]);
+  const [selectedProducts, setSelectedProducts] = useState(couponData.frequently_bought?.products_selected ? couponData.frequently_bought?.products_selected :[]);
   const [isSearchResultsOpen, setIsSearchResultsOpen] = useState(false);
   const [localData,setLocalData] = useState({
     frequently_bought:{
-      products_selected:[],
-      discount:'',
-      ischecked_all:false,
-      number_of_discount:''
+      products_selected:couponData.frequently_bought?.products_selected,
+      discount:couponData.frequently_bought?.discount,
+      ischecked_all:couponData.frequently_bought?.ischecked_all,
+      number_of_discount:couponData.frequently_bought?.number_of_discount,
     }
   })
 

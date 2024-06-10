@@ -2,9 +2,9 @@ import React, { useState } from 'react';
 import './productcustom.css';
 
 function ProductCustom({couponData,setCouponData}) {
-  const [isChecked, setIsChecked] = useState(false);
+  const [isChecked, setIsChecked] = useState(couponData.new_collection);
   const [localData, setLocalData] = useState({
-    new_collection: false, // Consider using a more descriptive property name (e.g., isNewCollection)
+    new_collection: couponData.new_collection, // Consider using a more descriptive property name (e.g., isNewCollection)
   });
 
   const handleChange = () => {

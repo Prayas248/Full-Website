@@ -77,6 +77,7 @@ const ProductCategories = ({couponData,setCouponData}) => {
   const handleSubmit = (event) => { 
     event.preventDefault();// Call parent's function with clicked section
     setCouponData({ ...couponData, ...localData }); // Update parent's state
+    console.log(couponData)
   };
 
   return (

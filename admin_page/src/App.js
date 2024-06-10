@@ -55,6 +55,7 @@ function App() {
       <Route path='/orderdetails/:id' element={<Order />} />
       <Route path='/product' element={<ProductInvoice />} />
       <Route path='/addproduct' element={<ProductData />} />
+      <Route path='/addproduct/:id' element={<ProductData />} />
     </Routes>
     </Router>
     </div>

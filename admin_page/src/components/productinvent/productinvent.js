@@ -2,10 +2,10 @@ import React, { useEffect, useState } from "react";
 import "./productinvent.css";
 
 const ProductInventory = ({couponData,setCouponData}) => {
-  const [sku, setSku] = useState("");
-  const [trackStock, setTrackStock] = useState(false);
-  const [stockStatus, setStockStatus] = useState("in stock");
-  const [soldIndividually, setSoldIndividually] = useState(false);
+  const [sku, setSku] = useState(couponData.sku_code);
+  const [trackStock, setTrackStock] = useState(couponData.stock_management);
+  const [stockStatus, setStockStatus] = useState(couponData.stock_status);
+  const [soldIndividually, setSoldIndividually] = useState(couponData.sold_individually);
 
  
   const handleSkuChange = (e) => {
@@ -37,7 +37,14 @@ const ProductInventory = ({couponData,setCouponData}) => {
   
   const handleSubmit = (event) => { 
     event.preventDefault();// Call parent's function with clicked section
-    setCouponData({ ...couponData, ...localData }); // Update parent's state
+    setCouponData({
+      ...couponData,
+      sku_code: sku, // Update only modified properties
+      stock_management: trackStock,
+      sold_individually: soldIndividually,
+      stock_status: stockStatus,
+    });
+    console.log("HI",couponData)
   };
 
 
