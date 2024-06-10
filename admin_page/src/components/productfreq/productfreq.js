@@ -1,28 +1,58 @@
 import React, { useState,useEffect } from 'react';
 import './productfreq.css';
 
-function ProductFeq() {
+function ProductFeq({couponData,setCouponData}) {
   const [discount, setDiscount] = useState(0);
   const [items, setItems] = useState(2);
   const [checked, setChecked] = useState(false);
-
-  const handleDiscountChange = (event) => {
-    setDiscount(event.target.value);
-  };
-
-  const handleItemsChange = (event) => {
-    setItems(event.target.value);
-  };
-
-  const handleCheckChange = (event) => {
-    setChecked(event.target.checked);
-  };
-
-
+  
   const [searchTerm, setSearchTerm] = useState('');
   const [searchResults, setSearchResults] = useState([]);
   const [selectedProducts, setSelectedProducts] = useState([]);
   const [isSearchResultsOpen, setIsSearchResultsOpen] = useState(false);
+  const [localData,setLocalData] = useState({
+    frequently_bought:{
+      products_selected:[],
+      discount:'',
+      ischecked_all:false,
+      number_of_discount:''
+    }
+  })
+
+  const handleDiscountChange = (event) => {
+    setDiscount(event.target.value);
+    setLocalData((prevState) => ({
+      ...prevState,
+      frequently_bought: {
+        ...prevState.frequently_bought,
+        discount: event.target.value,
+      },
+    }));
+  };
+
+  const handleItemsChange = (event) => {
+    setItems(event.target.value);
+    setLocalData((prevState) => ({
+      ...prevState,
+      frequently_bought: {
+        ...prevState.frequently_bought,
+        number_of_discount: event.target.value,
+      },
+    }));
+    
+  };
+
+  const handleCheckChange = (event) => {
+    setChecked(event.target.checked);
+    setLocalData((prevState) => ({
+      ...prevState,
+      frequently_bought: {
+        ...prevState.frequently_bought,
+        ischecked_all: event.target.checked,
+      },
+    }));
+  };
+
 
   const handleSearchChange = (event) => {
     setSearchTerm(event.target.value);
@@ -45,21 +75,29 @@ function ProductFeq() {
     setIsSearchResultsOpen(false);
   };
 
-  const handleProductSelection = (productId,productname) => {
+  const handleProductSelection = (productId, productName) => {
     // Check if product is already selected
     const isAlreadySelected = selectedProducts.some((product) => product.id === productId);
     if (!isAlreadySelected) {
-      setSelectedProducts((prevProducts) => [...prevProducts, { id: productId, name:productname}]); // Add product with ID
+      const updatedProducts = [...selectedProducts, { id: productId, name: productName }];
+      setSelectedProducts(updatedProducts);
+      setIsSearchResultsOpen(false);
+      console.log('Selected Products:', updatedProducts);
+      setLocalData((prevState) => ({
+        ...prevState,
+        frequently_bought: {
+          ...prevState.frequently_bought,
+          products_selected: updatedProducts, // Update with the desired products
+        },
+      })); // Access updated state here
     }
-    setSearchTerm(''); // Clear input field
-    setIsSearchResultsOpen(false); // Close results
-    console.log(selectedProducts)
+    // ... (rest of the function)
   };
 
   const renderSearchResults = () => {
     return (searchResults.map((product) => (
       <li key={product._id}>
-        <button type="button" onClick={() => handleProductSelection(product._id,product.name)}>
+        <button type="button" className='result_button' onClick={() => handleProductSelection(product._id,product.name)}>
           {product.name}
         </button>
       </li>
@@ -67,7 +105,10 @@ function ProductFeq() {
   );
   };
 
-
+  const handleSubmit = (event) =>{
+    event.preventDefault();// Call parent's function with clicked section
+        setCouponData({ ...couponData, ...localData }); // Update parent's state
+  }
 
 
 
@@ -121,6 +162,7 @@ function ProductFeq() {
           onChange={handleItemsChange}
         />
       </div>
+      <button onClick={handleSubmit}>Save this</button>
     </div>
   );
 }

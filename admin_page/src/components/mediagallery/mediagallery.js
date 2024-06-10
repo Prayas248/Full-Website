@@ -1,17 +1,48 @@
 
-import React from 'react';
-import './mediagallery.css';
+import React, { useEffect, useState } from 'react';
+import './mediagall.css';
+import { Form, useNavigate } from 'react-router-dom';
 
 const ImageGallery = () => {
   //  3000 images
-  const images = new Array(3000).fill(0);
+  const navigate = useNavigate();
+  const [apidata,setApidata] = useState(null);
+  const [image,setImage] = useState(false);
+
+  const getAllOrders = async () => {
+    await fetch(`http://localhost:4000/getAllImage`)
+      .then((res) => res.json())
+      .then((data) => { setApidata(data) })
+      
+  } 
+  useEffect(()=>{
+    getAllOrders();
+  },[])
+  const imagehandler = (e) =>{
+    setImage(e.target.files[0]);
+  }
+  const Add_Image = async()=>{
+    let formdata = new FormData();
+    formdata.append('image',image);
+
+    await fetch("http://localhost:4000/upload",{
+      method:'POST',
+      headers:{
+        Accept:'application/json',
+      },
+      body:formdata,
+    }).then((resp)=>resp.json).then((data)=>{console.log(data)})
+    getAllOrders();
+  }
 
   return (
     <div className="library">
         <div className="mediabut">
         <h2>Library</h2>
-         <button className="but">Add new</button></div>
+         <input onChange={imagehandler} type='file' name='image' placeholder='Add new'/></div>
+         <button className="but" onClick={()=>{Add_Image()}}>Click to confirm image</button>
       <div className="toolbar">
+      <span style={{height:"40px",backgroundColor:"gray",cursor:"pointer"}} onClick={()=>{navigate("/Library")}}>Switch</span>
         <select>
           <option >All files</option>
         </select>
@@ -20,11 +51,10 @@ const ImageGallery = () => {
         </select>
         <button className="mediabutton">Bulk Select</button>
       </div>
-      <input className="searchmedia" type="text" placeholder="Search" />
       <div className="grid">
-        {images.slice(0, 16).map((_, index) => (
+        {apidata && apidata.slice(0, 16).map((image, index) => (
           <div className="image-container" key={index}>
-            <div className="image-placeholder">Img</div>
+            <img className="image-placeholder" src={image.image}/>
           </div>
         ))}
       </div>

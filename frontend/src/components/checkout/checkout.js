@@ -55,14 +55,20 @@ const CheckoutForm = () => {
       key:"rzp_test_CgUOgFmuvJ2kxv",
       amount:data.amount,
       currency:data.currency,
-      name:apidata[0].name,
+      name:"Jijivisha",
       description:"Test Transaction",
       order_id:data.id,
       handler:async(response)=>{
         try{
           const verifyURL = "http://localhost:4000/verify" 
-          const {data} = await axios.post(verifyURL,response);
-          console.log(data);
+          const verificationResponse = await axios.post(verifyURL,{
+            ...formData,
+            paymentResponse:response});
+          console.log(verificationResponse.data);
+          if(verificationResponse.data.status === 'success'){
+
+          }
+
         }
         catch(error){ 
           console.log(error);
@@ -210,7 +216,7 @@ const CheckoutForm = () => {
               <input type="checkbox" required />
             </label>
           </div>
-          <button type="submit"  className="place-order">Place order</button>
+          <button type="submit" onClick={handlepayment} className="place-order">Place order</button>
           <button onClick={handlepayment}>Payment</button>
         </div>
       </form>

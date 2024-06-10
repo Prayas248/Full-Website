@@ -198,7 +198,7 @@ console.log(discount_price)
             <div className="bor"></div>
             <p className="p2">Total: ₹{totalPrice-discount_price}</p>
           </div>
-          <button className="checkout-button">Proceed to checkout</button>
+          <button className="checkout-button" onClick={()=>{navigate("/checkout")}}>Proceed to checkout</button>
         </div>
       </div>
     </div>

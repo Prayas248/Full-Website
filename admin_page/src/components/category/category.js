@@ -49,8 +49,8 @@ const footwear = ['footwear','Juttis','Slip-Ons','Sandals'];
 
 
 
-const ProductCategories = () => {
-  const [couponData,setCouponData] = useState({
+const ProductCategories = ({couponData,setCouponData}) => {
+  const [localData,setLocalData] = useState({
     category:{
       maincategory:'',
       subcategories:'',
@@ -61,19 +61,23 @@ const ProductCategories = () => {
   
   const handleCategoryChange = (maincategory,subcategories,lastcategories,material) => {
     console.log(maincategory,subcategories,lastcategories)
-    setCouponData(({
+    setLocalData(({
       category: { // Spread previous category state
         maincategory: maincategory, // Update maincategory
         subcategories: subcategories, // Update subcategories
         lastcategories: lastcategories, // Update lastcategories
       },
-      material:material,
+      material:material || "",
     }));
     
   };
   useEffect(()=>{
-    console.log(couponData)
-  },[couponData])
+    console.log(localData)
+  },[localData])
+  const handleSubmit = (event) => { 
+    event.preventDefault();// Call parent's function with clicked section
+    setCouponData({ ...couponData, ...localData }); // Update parent's state
+  };
 
   return (
     <div className="product-categories">
@@ -265,7 +269,7 @@ const ProductCategories = () => {
         ))}
       </div>
       <div className="add-category">
-        <a href="#">+ Add new category</a>
+        <a href="#" onClick={handleSubmit}>+ Add new category</a>
       </div>
     </div>
   );

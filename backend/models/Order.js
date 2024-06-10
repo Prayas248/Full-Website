@@ -15,7 +15,35 @@ const Order = new mongoose.Schema({
     },
     status:{
         type: String,
+        default:"On hold"
         
+    },
+    firstName:{
+        type:String,
+    },
+    lastName:{
+        type:String,
+    },
+    companyName:{
+        type:String,
+    },
+    streetAddress:{
+        type:String,
+    },
+    apartment:{
+        type:String,
+    },
+    city:{
+        type:String,
+    },
+    state:{
+        type:String
+    },
+    country:{
+        type:String,
+    },
+    code:{
+        type:Number,
     },
     amount:{
         type: Number,
@@ -37,6 +65,21 @@ const Order = new mongoose.Schema({
         type:String,
     },
     shipping:{
+        type:String,
+    },
+    razorpay_order_id:{
+        type:String,
+    },
+    razorpay_payment_id:{
+        type:String,
+    },
+    razorpay_signature:{
+        type:String,
+    },
+    note:{
+        type:String,
+    },
+    paymentMethod:{
         type:String,
     },
     email:{

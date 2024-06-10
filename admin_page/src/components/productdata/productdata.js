@@ -17,7 +17,7 @@ const ProductData = () => {
   const [activeSection, setActiveSection] = useState('General'); // Track active section
   const [imageData,setImageData] = useState([]);
   const [couponData, setCouponData] = useState({
-    productName: '',
+    name: '',
     permalink: '',
     old_price: '',
     new_price: '',
@@ -36,7 +36,28 @@ const ProductData = () => {
     },
     weight:'',
     shipping_class:'',
-    images:[]
+    image:[],
+    category:{
+      maincategory:'',
+      subcategories:'',
+      lastcategories:'',
+    },
+    material:'',
+    attributes: [{
+      title: '',
+      value: '',
+      isVisible: false,
+    }],
+    frequently_bought:{
+      products_selected:[],
+      discount:'',
+      ischecked_all:false,
+      number_of_discount:''
+    },
+    upsells:'',
+    cross_sells:'',
+    new_collection:false,
+    product_details:'',
   });
  useEffect(()=>{
   console.log(couponData)
@@ -46,7 +67,7 @@ const ProductData = () => {
     setCouponData((prevInfo) => ({ ...prevInfo, [name]: value }));
   };
   useEffect(()=>{
-    setCouponData({images:imageData})
+    setCouponData({image:imageData})
   },[imageData])
   const handleSectionClick = (section) => {
     setActiveSection(section); // Update active section state
@@ -55,6 +76,17 @@ const ProductData = () => {
   const handlepop = () =>{
     setisOpen(!isopen);
   }
+  
+  const handleSubmitter = async() =>{
+    await fetch(`http://localhost:4000/addproduct`,{
+        method:'POST',
+        headers:{
+            Accept:'application/json',
+            'Content-Type':'application/json',
+        },
+        body:JSON.stringify(couponData),
+    }).then(alert("Done scene"))
+}
 
   return (
     <div className="genproduct-data-container">
@@ -63,8 +95,8 @@ const ProductData = () => {
           <label htmlFor="product-name">Product Name:</label>
           <input type="text"
             id="product-name"
-            name="productName"
-            value={couponData.productName}
+            name="name"
+            value={couponData.name}
             onChange={handleInputChange} />
         </div>
         <div className="genform-groups">
@@ -101,7 +133,9 @@ const ProductData = () => {
             <option>Product Short Description</option>
             <option>Product Content</option>
           </select>
-          <textarea />
+          <textarea name="product_details"
+          value={couponData.product_details}
+          onChange={handleInputChange}/>
         </div>
       </div>
 
@@ -114,7 +148,7 @@ const ProductData = () => {
       </div>
     </div>
     </div>
-    <div><ProductCategories /></div></div>
+    <div><ProductCategories couponData={couponData} setCouponData={setCouponData}/></div></div>
       <header className="genheader">
         <h2>Size Chart:</h2>
         <button className="gendrop-file">Or drop a file</button>
@@ -149,7 +183,7 @@ const ProductData = () => {
           {activeSection === "Link" && <ProductLink couponData={couponData} setCouponData={setCouponData}/>}
           {activeSection === "Shipping" && <ShippingForm couponData={couponData} setCouponData={setCouponData}/>}
           {activeSection === "Attribute" && <AttributeForm couponData={couponData} setCouponData={setCouponData}/>}
-          <button>Save</button>
+          <button onClick={handleSubmitter}>Save</button>
         </div>
         <div className="genpublish-container">
           <div className="genpublish-section">

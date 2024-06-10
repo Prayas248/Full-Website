@@ -20,7 +20,7 @@
   
   .search-results {
     position: absolute; /* Position results absolutely within the container */
-    top: 100%; /* Place results below the input field */
+    top: 148%; /* Place results below the input field */
     left: 0; /* Align results to the left edge of the container */
     width: 100%; /* Make results as wide as the container */
     background-color: white; /* Set background color for better visibility */
@@ -50,4 +50,8 @@
   
   input[type="checkbox"] {
     margin-right: 5px;
+  }
+  .result_button{
+    width: 500px;
+    height: auto;
   }

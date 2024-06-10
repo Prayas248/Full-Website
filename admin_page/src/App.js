@@ -40,6 +40,7 @@ function App() {
       <Route path='/Currency' element={<MainCurrency />} />
       <Route path='/blog' element={<BlogInvoice />} />
       <Route path='/Library' element={<Library />} />
+      <Route path="/imageGallery" element={<ImageGallery />} />
       <Route path='/Pages' element={<PageInvoice />} />
       <Route path='/Comments' element={<CommentInvoice />} />
       <Route path='/SizeChart' element={<SizeInvoice />} />

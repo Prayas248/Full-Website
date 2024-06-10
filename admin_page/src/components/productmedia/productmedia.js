@@ -41,13 +41,15 @@ const ProductMedia = ({imageData,setImageData}) => {
   }, [formdata]);
 
   const handleImageClick = (image) => {
-    const isSelected = selectedImages.includes(image._id);
+    const isSelected = selectedImages.includes(image.image); // Check for image.image
+  
     const updatedSelection = isSelected
-      ? selectedImages.filter((id) => id !== image._id) // Deselect if already selected
-      : [...selectedImages, image._id]; // Add to selection if not selected
-
+      ? selectedImages.filter((existingImage) => existingImage.image !== image.image) // Deselect if already selected
+      : [...selectedImages, image.image]; // Add to selection if not selected
+  
     setSelectedImages(updatedSelection);
   };
+  
 
   const handleSelectClick = () => {
     // Pass selected images to parent component (implementation depends on your setup)
@@ -90,7 +92,7 @@ const ProductMedia = ({imageData,setImageData}) => {
                 style={{ cursor: 'pointer' }} // Optional: Set cursor to pointer on hover
               />
               {/* Display selection status visually (optional) */}
-              {selectedImages.includes(image._id) && <div className="selected-overlay">Selected</div>}
+              {selectedImages.includes(image.image) && <div className="selected-overlay">Selected</div>}
             </div>
           ))}
       </div>

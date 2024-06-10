@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
 import './media.css';
 import { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 const Library = () => {
-  
+  const navigate = useNavigate();
   const [apidata, setApidata] = useState(null);
   const [count,setcount] = useState(0);
   const [start,setStart] = useState(0);
+  const [image,setImage] = useState(false);
   const [formdata,setFormdata] = useState({
     search:""
   });
@@ -69,13 +71,33 @@ const Library = () => {
     setCurrentPage(page);
   };
 */}
+const imagehandler = (e) =>{
+  setImage(e.target.files[0]);
+}
+const Add_Image = async()=>{
+  let formdata = new FormData();
+  formdata.append('image',image);
+
+  await fetch("http://localhost:4000/upload",{
+    method:'POST',
+    headers:{
+      Accept:'application/json',
+    },
+    body:formdata,
+  }).then((resp)=>resp.json).then((data)=>{console.log(data)})
+  getAllOrders();
+}
+
   return (
     <div className="medialibrary">
         <div className="lib">
       <h1>Library</h1>
-      <button className="add-new-button">Add New</button></div>
+      <input onChange={imagehandler} type='file' name='image' placeholder='Add new'/></div>
+         <button className="add-new-button" onClick={()=>{Add_Image()}}>Click to confirm image</button>
+    
       <div className="mediatoolbar">
         <div className="mediafilter-container">
+          <span style={{border:"1px solid black",backgroundColor:"gray",cursor:"pointer",padding:"5px"}} onClick={()=>{navigate("/imageGallery")}}>Switch</span>
           <select className="mediafilter">
             <option value="all">All Files</option>
           </select>

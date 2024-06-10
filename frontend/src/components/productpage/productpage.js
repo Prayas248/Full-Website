@@ -4,11 +4,12 @@ import Review from "../review/review"
 import { Counter } from "./counter"
 import { SizeRadio } from "./sizeRadio"
 import { useEffect } from "react"
-import { useParams } from "react-router-dom"
+import { Navigate, useNavigate, useParams } from "react-router-dom"
 import { useState } from "react"
 
 
 export function ProductPage() {
+  const navigate = useNavigate();
  const params = useParams();
  const [apidata, setApidata] = useState(null);
  const [images,setImages] = useState(null)
@@ -125,7 +126,10 @@ const handlecartclick = async () =>{
             <button className="cart" onClick={()=>{
               handlecartclick()
             }}>ADD TO CART</button>
-            <button className="buynow">BUY NOW</button>
+            <button className="buynow" onClick={()=>{
+              handlecartclick()
+              navigate("/checkout")
+            }}>BUY NOW</button>
           </div>
 
         </div>
